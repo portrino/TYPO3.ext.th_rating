@@ -19,7 +19,7 @@
 		}
 	},
 	"replace" : {
-		"th-rating" : "self.version",
+		"th_rating" : "self.version",
 		"typo3-ter/th-rating" : "self.version"
 	}
 }
