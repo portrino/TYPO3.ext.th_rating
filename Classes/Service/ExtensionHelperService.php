@@ -105,17 +105,25 @@ class ExtensionHelperService extends \Thucke\ThRating\Service\AbstractExtensionS
 	 * @var \Thucke\ThRating\Domain\Model\RatingImage $ratingImage
 	 */
 	protected $ratingImage;
-	
+
 	/**
-	 * Constructor
-	 * @param \TYPO3\CMS\Extbase\Object\ObjectManagerInterface $objectManager
-	 * @param \Thucke\ThRating\Service\LoggingService $loggingService
-	 * @return void
+	 * Initialize object
+     *
+     * @return void
 	 */
 	public function initializeObject() {
-		$this->settings = $this->configurationManager->getConfiguration(\TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS,'thrating','pi1');
-		$frameworkConfiguration = $this->configurationManager->getConfiguration(\TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK,'thrating','pi1');
-		\TYPO3\CMS\Core\Utility\ArrayUtility::mergeRecursiveWithOverrule($this->settings['ratingConfigurations'], $frameworkConfiguration['ratings']);
+	    if (TYPO3_MODE === 'FE') {
+            $this->settings = $this->configurationManager->getConfiguration(
+                \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS,
+                'thrating', 'pi1');
+            $frameworkConfiguration = $this->configurationManager->getConfiguration(
+                \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK,
+                'thrating', 'pi1');
+            \TYPO3\CMS\Core\Utility\ArrayUtility::mergeRecursiveWithOverrule(
+                $this->settings['ratingConfigurations'],
+                $frameworkConfiguration['ratings']
+            );
+        }
 	}
 
 	/**
