@@ -52,27 +52,34 @@ class StepnameValidator extends \TYPO3\CMS\Extbase\Validation\Validator\Abstract
 	 * If the given step is valid
 	 *
 	 * @param \Thucke\ThRating\Domain\Model\Stepname $stepname
-	 * @return void
+	 * @return bool
 	 */
 	public function isValid($stepname) {
+	    $result = true;
+
 		//a stepname object must have a stepconf
 		if (!$stepname->getStepconf() instanceof \Thucke\ThRating\Domain\Model\Stepconf) {
 			$this->addError(\TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('error.validator.stepname.stepconf', 'ThRating'), 1382895072);
+			$result = false;
 		}
 
 		//check if given languagecode exists in website
-		If ( !$this->stepnameRepository->checkStepnameLanguage($stepname) ) {
+		if ( !$this->stepnameRepository->checkStepnameLanguage($stepname) ) {
 			$this->addError(\TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('error.validator.stepname.sysLang', 'ThRating'), 1382895089);
+			$result = false;
 		}
 	
-		//now check if entry for default language exists
-		$langUid = $stepname->get_languageUid();
-		if ( !empty($langUid) ) {
-			$defaultStepname = $this->stepnameRepository->findDefaultStepname($stepname);
-			if ( !($defaultStepname instanceof \Thucke\ThRating\Domain\Model\Stepname && $this->isValid($defaultStepname)) ) {
-				$this->addError(\TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('error.validator.stepname.defaultLang', 'ThRating'), 1382895097);
-			}
-		}				
+//		//now check if entry for default language exists
+//		$langUid = $stepname->get_languageUid();
+//		if ( !empty($langUid) ) {
+//			$defaultStepname = $this->stepnameRepository->findDefaultStepname($stepname);
+//			if ( !($defaultStepname instanceof \Thucke\ThRating\Domain\Model\Stepname && $this->isValid($defaultStepname)) ) {
+//				$this->addError(\TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('error.validator.stepname.defaultLang', 'ThRating'), 1382895097);
+//                $result = false;
+//			}
+//		}
+
+		return $result;
 	}
 }
 ?>
